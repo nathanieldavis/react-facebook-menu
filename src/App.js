@@ -33,9 +33,16 @@ function App() {
 function DropdownMenu() {
 
   const [activeMenu, setActiveMenu] = useState('main'); //settings, animals
+  const [menuHeight, setMenuHeight] = useState(null);
+
+  function calcHeight(el) {
+    const height = el.offsetHeight;
+    setMenuHeight(height);
+  }
 
   function DropdownItem(props) {
     return (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a href="#" className="menu-item" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
         <span className="icon-button">{props.leftIcon}</span>
 
@@ -47,12 +54,13 @@ function DropdownMenu() {
   }
 
   return (
-    <div className="dropdown">
+    <div className="dropdown" style={{ height: menuHeight}}>
       <CSSTransition 
         in={activeMenu === 'main'}
         unmountOnExit
         timeout={500}
         classNames="menu-primary"
+        onEnter={calcHeight}
         >
           <div className="menu">
           <DropdownItem>My Profile</DropdownItem>
@@ -71,9 +79,17 @@ function DropdownMenu() {
         unmountOnExit
         timeout={500}
         classNames="menu-secondary"
+        onEnter={calcHeight}
         >
           <div className="menu">
-          <DropdownItem leftIcon={<ArrowIcon />} goToMenu="main" />
+          <DropdownItem leftIcon={<ArrowIcon />} goToMenu="main">Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
           <DropdownItem>Settings</DropdownItem>
         </div>
       </CSSTransition>
