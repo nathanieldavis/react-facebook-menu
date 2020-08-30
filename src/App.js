@@ -8,6 +8,8 @@ import { ReactComponent as ChevronIcon} from './icons/chevron.svg';
 import { ReactComponent as ArrowIcon } from './icons/arrow.svg';
 import { ReactComponent as BoltIcon } from './icons/bolt.svg';
 
+import { CSSTransition } from 'react-transition-group';
+
 
 
 
@@ -30,9 +32,11 @@ function App() {
 
 function DropdownMenu() {
 
+  const [activeMenu, setActiveMenu] = useState('main'); //settings, animals
+
   function DropdownItem(props) {
     return (
-      <a href="#" className="menu-item">
+      <a href="#" className="menu-item" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
         <span className="icon-button">{props.leftIcon}</span>
 
         {props.children}
@@ -44,12 +48,36 @@ function DropdownMenu() {
 
   return (
     <div className="dropdown">
-      <DropdownItem>My Profile</DropdownItem>
-      <DropdownItem 
-        leftIcon={<CogIcon /> }
-        rightIcon={<ChevronIcon /> }>
-        Settings
-      </DropdownItem>
+      <CSSTransition 
+        in={activeMenu === 'main'}
+        unmountOnExit
+        timeout={500}
+        classNames="menu-primary"
+        >
+          <div className="menu">
+          <DropdownItem>My Profile</DropdownItem>
+          <DropdownItem 
+            leftIcon={<CogIcon /> }
+            rightIcon={<ChevronIcon /> }
+            goToMenu="settings"
+            >
+              Settings
+          </DropdownItem>
+        </div>
+      </CSSTransition>
+
+      <CSSTransition 
+        in={activeMenu === 'settings'}
+        unmountOnExit
+        timeout={500}
+        classNames="menu-secondary"
+        >
+          <div className="menu">
+          <DropdownItem leftIcon={<ArrowIcon />} goToMenu="main" />
+          <DropdownItem>Settings</DropdownItem>
+        </div>
+      </CSSTransition>
+
     </div>
   );
 }
